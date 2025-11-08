@@ -99,6 +99,9 @@ class GlobalErrorHandler {
     this.startMemoryMonitoring();
 
 
+    console.log('✅ [全局错误处理器] 已初始化');
+  }
+
   // 敏感信息脱敏
   sanitize(obj){
     const mask=(s)=>typeof s==='string'?(s.length>8?s.slice(0,4)+'***'+s.slice(-4):'***'):s;
@@ -118,9 +121,6 @@ class GlobalErrorHandler {
       return out;
     };
     return walk(obj);
-  }
-
-    console.log('✅ [全局错误处理器] 已初始化');
   }
 
   /**
