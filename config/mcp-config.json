@@ -1,0 +1,37 @@
+{
+"mcpServers": {
+  "ccxt-mcp": {
+    "command": "npx",
+    "args": [
+      "-y",
+      "@lazydino/ccxt-mcp",
+      "--config",
+      "/path/to/ccxt-accounts.json"
+    ],
+    "env": {},
+    "working_directory": null
+  },
+  "playwright": {
+    "command": "npx",
+    "args": [
+      "@playwright/mcp@latest"
+    ],
+    "env": {},
+    "working_directory": null
+  },
+  "crypto-indicators-mcp": {
+    "command": "node",
+    "args": [
+      "<your-local-path>/crypto-indicators-mcp/index.js"
+    ],
+    "env": {
+      "EXCHANGE_NAME": "okx"
+    }
+  },
+  "coingecko_mcp": {
+    "command": "npx",
+    "args": [
+      "mcp-remote",
+      "https://mcp.api.coingecko.com/mcp"
+    ]
+  },

@@ -1,0 +1,91 @@
+# 依赖
+node_modules/
+client/node_modules/
+server/node_modules/
+
+# 构建产物
+client/dist/
+*.log
+
+# 数据库
+data/
+*.db
+*.db-shm
+*.db-wal
+
+# 环境变量和敏感配置 (CRITICAL - Never commit!)
+.env
+.env.local
+.env.*.local
+server/.env
+config/ccxt-accounts.json
+config/*-accounts.json
+config/*.secret.json
+
+# Security-sensitive files
+*.key
+*.pem
+*.p12
+*.pfx
+data/.enc_key
+**/api-keys.json
+
+# 编辑器
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# PM2
+.pm2/
+pids/
+*.pid
+*.seed
+
+# 临时文件
+temp/
+tmp/
+*.tmp
+dy
+
+# 备份文件
+*.backup
+*.bak
+*.old
+
+# 系统文件
+Thumbs.db
+desktop.ini
+
+# 日志
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 测试
+coverage/
+.nyc_output/
+test-*.js
+check-*.js
+verify-*.js
+fix-*.js
+*_response.json
+response.json
+
+# AI助手配置
+.claude/
+.cursor/
+
+# 开发临时文档
+*_REPORT.md
+*_SUMMARY.txt
+*_PROGRESS*.md
+*_STATUS*.md
+
+# 系统临时文件
+NUL
+nul

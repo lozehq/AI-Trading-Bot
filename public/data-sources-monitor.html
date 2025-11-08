@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>数据源监控面板 - AI Trading System</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .header {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 15px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    .header h1 {
+      font-size: 32px;
+      color: #2d3748;
+      margin-bottom: 15px;
+    }
+
+    .header-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .stat-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .stat-card h3 {
+      font-size: 14px;
+      opacity: 0.9;
+      margin-bottom: 10px;
+    }
+
+    .stat-card .value {
+      font-size: 32px;
+      font-weight: bold;
+    }
+
+    .category-section {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 15px;
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    .category-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid #e2e8f0;
+    }
+
+    .category-header h2 {
+      color: #2d3748;
+      font-size: 24px;
+    }
+
+    .category-badge {
+      background: #667eea;
+      color: white;
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .data-sources-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 15px;
+    }
+
+    .data-source-card {
+      border: 2px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 15px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .data-source-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 5px;
+      background: #cbd5e0;
+    }
+
+    .data-source-card.available::before {
+      background: #48bb78;
+    }
+
+    .data-source-card.unavailable::before {
+      background: #f56565;
+    }
+
+    .data-source-card.available {
+      background: linear-gradient(to right, #f0fff4, white);
+      border-color: #48bb78;
+    }
+
+    .data-source-card.unavailable {
+      background: linear-gradient(to right, #fff5f5, white);
+      border-color: #f56565;
+      opacity: 0.7;
+    }
+
+    .data-source-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .source-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+
+    .source-name {
+      font-weight: 600;
+      color: #2d3748;
+      font-size: 16px;
+      flex: 1;
+    }
+
+    .source-id {
+      font-size: 12px;
+      color: #718096;
+      margin-top: 5px;
+      font-family: monospace;
+    }
+
+    .critical-badge {
+      background: #f56565;
+      color: white;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      margin-left: 10px;
+    }
+
+    .status-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+      font-size: 13px;
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #cbd5e0;
+    }
+
+    .status-dot.available {
+      background: #48bb78;
+      box-shadow: 0 0 8px rgba(72, 187, 120, 0.5);
+    }
+
+    .status-dot.unavailable {
+      background: #f56565;
+      box-shadow: 0 0 8px rgba(245, 101, 101, 0.5);
+    }
+
+    .refresh-info {
+      text-align: center;
+      color: #718096;
+      margin-top: 20px;
+      font-size: 14px;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+      font-size: 18px;
+      color: #4a5568;
+    }
+
+    .error {
+      background: #fff5f5;
+      border: 2px solid #f56565;
+      border-radius: 10px;
+      padding: 20px;
+      color: #c53030;
+      margin: 20px 0;
+    }
+
+    .legend {
+      display: flex;
+      gap: 30px;
+      justify-content: center;
+      margin-top: 15px;
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: #4a5568;
+    }
+
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>数据源监控面板</h1>
+      <p style="color: #718096; margin-top: 10px;">实时监控AI分析系统的所有数据源状态</p>
+
+      <div class="legend">
+        <div class="legend-item">
+          <div class="legend-dot" style="background: #48bb78;"></div>
+          <span>可用 (AI已使用)</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-dot" style="background: #f56565;"></div>
+          <span>不可用</span>
+        </div>
+        <div class="legend-item">
+          <div class="critical-badge">CRITICAL</div>
+          <span>关键数据源</span>
+        </div>
+      </div>
+
+      <div class="header-stats" id="headerStats">
+        <div class="stat-card">
+          <h3>数据源总数</h3>
+          <div class="value" id="totalSources">-</div>
+        </div>
+        <div class="stat-card">
+          <h3>可用数据源</h3>
+          <div class="value" id="availableSources">-</div>
+        </div>
+        <div class="stat-card">
+          <h3>数据覆盖率</h3>
+          <div class="value" id="coveragePercent">-</div>
+        </div>
+        <div class="stat-card">
+          <h3>关键数据源</h3>
+          <div class="value" id="criticalSources">-</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="content" class="loading">
+      正在加载数据源状态...
+    </div>
+
+    <div class="refresh-info">
+      自动刷新: 每10秒更新一次 | 最后更新: <span id="lastUpdate">-</span>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = 'http://localhost:3000';
+    let refreshInterval;
+
+    async function fetchDataSourceStatus() {
+      try {
+        const response = await fetch(`${API_BASE}/api/data-sources/status`);
+        if (!response.ok) throw new Error('Failed to fetch data');
+        const result = await response.json();
+
+        if (result.success) {
+          renderDataSources(result.data);
+          updateLastUpdate();
+        } else {
+          showError(result.error || 'Unknown error');
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        showError(error.message);
+      }
+    }
+
+    function renderDataSources(data) {
+      const content = document.getElementById('content');
+
+      // Update header stats
+      document.getElementById('totalSources').textContent = data.summary.total;
+      document.getElementById('availableSources').textContent = data.summary.available;
+      document.getElementById('coveragePercent').textContent = `${data.summary.coveragePercent}%`;
+      document.getElementById('criticalSources').textContent = data.summary.critical;
+
+      // Render categories
+      const categories = [
+        { key: 'core', title: '核心基础数据', description: 'ticker, indicators, ohlcv, orderBook, trades' },
+        { key: 'market', title: '市场数据', description: '多时间框架、情绪指标、币种详情等' },
+        { key: 'phase1', title: 'Phase 1 - CRITICAL', description: '5个关键数据源' },
+        { key: 'phase2', title: 'Phase 2 - HIGH PRIORITY', description: '10个高优先级数据源' },
+        { key: 'phase3', title: 'Phase 3 - MEDIUM PRIORITY', description: '6个中优先级数据源' },
+        { key: 'phase4', title: 'Phase 4 - COMPLETION', description: '14个完整性数据源' }
+      ];
+
+      let html = '';
+      categories.forEach(cat => {
+        const sources = data[cat.key];
+        if (!sources || sources.length === 0) return;
+
+        const availableCount = sources.filter(s => s.available).length;
+
+        html += `
+          <div class="category-section">
+            <div class="category-header">
+              <div>
+                <h2>${cat.title}</h2>
+                <p style="color: #718096; font-size: 14px; margin-top: 5px;">${cat.description}</p>
+              </div>
+              <div class="category-badge">${availableCount}/${sources.length} 可用</div>
+            </div>
+            <div class="data-sources-grid">
+              ${sources.map(source => renderDataSourceCard(source)).join('')}
+            </div>
+          </div>
+        `;
+      });
+
+      content.innerHTML = html;
+    }
+
+    function renderDataSourceCard(source) {
+      const statusClass = source.available ? 'available' : 'unavailable';
+      const statusText = source.available ? '可用' : '不可用';
+      const criticalBadge = source.critical ? '<span class="critical-badge">CRITICAL</span>' : '';
+
+      return `
+        <div class="data-source-card ${statusClass}">
+          <div class="source-header">
+            <div>
+              <div class="source-name">
+                ${source.name}
+                ${criticalBadge}
+              </div>
+              <div class="source-id">${source.id}</div>
+            </div>
+          </div>
+          <div class="status-indicator">
+            <div class="status-dot ${statusClass}"></div>
+            <span style="color: ${source.available ? '#2f855a' : '#c53030'}; font-weight: 600;">
+              ${statusText}
+            </span>
+          </div>
+        </div>
+      `;
+    }
+
+    function showError(message) {
+      const content = document.getElementById('content');
+      content.innerHTML = `
+        <div class="error">
+          <h3 style="margin-bottom: 10px;">加载失败</h3>
+          <p>${message}</p>
+          <button onclick="fetchDataSourceStatus()" style="margin-top: 15px; padding: 10px 20px; background: #f56565; color: white; border: none; border-radius: 5px; cursor: pointer;">
+            重试
+          </button>
+        </div>
+      `;
+    }
+
+    function updateLastUpdate() {
+      const now = new Date();
+      const timeString = now.toLocaleTimeString('zh-CN');
+      document.getElementById('lastUpdate').textContent = timeString;
+    }
+
+    // Initialize
+    fetchDataSourceStatus();
+
+    // Auto refresh every 10 seconds
+    refreshInterval = setInterval(fetchDataSourceStatus, 10000);
+
+    // Cleanup on page unload
+    window.addEventListener('beforeunload', () => {
+      if (refreshInterval) clearInterval(refreshInterval);
+    });
+  </script>
+</body>
+</html>

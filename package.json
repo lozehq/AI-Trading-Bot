@@ -1,0 +1,56 @@
+{
+  "name": "auto-trading-ai",
+  "version": "1.0.0",
+  "description": "全自动交易AI助手 - 整合DeepSeek API和MCP工具",
+  "main": "server/index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "nodemon --exec \"node --expose-gc --max-old-space-size=4096\" server/index.js",
+    "client": "cd client && npm run dev -- --open",
+    "build": "cd client && npm run build",
+    "build:ts": "tsc",
+    "start": "node --expose-gc --max-old-space-size=4096 server/index.js",
+    "install-all": "npm install && cd client && npm install",
+    "db:init": "node server/database/database.js",
+    "db:backup": "node scripts/backup-database.js",
+    "db:cleanup": "node scripts/cleanup-database.js"
+  },
+  "keywords": [
+    "trading",
+    "ai",
+    "crypto",
+    "deepseek",
+    "mcp"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@xenova/transformers": "^2.17.2",
+    "axios": "^1.7.9",
+    "better-sqlite3": "^12.4.1",
+    "ccxt": "^4.2.0",
+    "cors": "^2.8.5",
+    "dayjs": "^1.11.19",
+    "dotenv": "^16.3.1",
+    "express": "^4.21.2",
+    "https-proxy-agent": "^7.0.6",
+    "joi": "^17.13.3",
+    "jsonrepair": "^3.13.1",
+    "jsonwebtoken": "^9.0.3",
+    "node-fetch": "^2.7.0",
+    "nodemailer": "^7.0.10",
+    "p-limit": "^3.1.0",
+    "socks-proxy-agent": "^8.0.5",
+    "ws": "^8.18.3"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.9.1",
+    "@types/ws": "^8.18.1",
+    "concurrently": "^8.2.2",
+    "nodemon": "^3.0.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}

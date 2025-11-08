@@ -1,0 +1,21 @@
+{
+  "accounts": {
+    "okx_main": {
+      "exchange": "okx",
+      "apiKey": "YOUR_OKX_API_KEY",
+      "secret": "YOUR_OKX_SECRET",
+      "password": "YOUR_OKX_PASSWORD",
+      "options": {
+        "defaultType": "swap"
+      }
+    },
+    "binance_main": {
+      "exchange": "binance",
+      "apiKey": "YOUR_BINANCE_API_KEY",
+      "secret": "YOUR_BINANCE_SECRET",
+      "options": {
+        "defaultType": "future"
+      }
+    }
+  }
+}

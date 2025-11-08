@@ -1,0 +1,75 @@
+{
+  "compilerOptions": {
+    /* 语言和环境 */
+    "target": "ES2020",                          /* 设置JavaScript语言版本 */
+    "lib": ["ES2020"],                           /* 指定要包含的库文件 */
+    "module": "commonjs",                        /* 指定模块代码生成 */
+    "moduleResolution": "node",                  /* 指定模块解析策略 */
+    
+    /* 输出 */
+    "outDir": "./dist",                          /* 指定输出目录 */
+    "rootDir": "./",                             /* 指定输入文件的根目录 */
+    "removeComments": true,                      /* 删除注释 */
+    "sourceMap": true,                           /* 生成source map文件 */
+    
+    /* 互操作性约束 */
+    "esModuleInterop": true,                     /* 启用ES模块互操作性 */
+    "allowSyntheticDefaultImports": true,        /* 允许从没有默认导出的模块中默认导入 */
+    "forceConsistentCasingInFileNames": true,    /* 确保文件名大小写一致 */
+    
+    /* 类型检查 */
+    "strict": false,                             /* 启用所有严格类型检查选项（渐进式迁移，先设为false） */
+    "noImplicitAny": false,                      /* 不允许隐式any类型（渐进式迁移，先设为false） */
+    "strictNullChecks": false,                   /* 严格的null检查（渐进式迁移，先设为false） */
+    "strictFunctionTypes": false,                /* 严格的函数类型检查 */
+    "strictBindCallApply": false,                /* 严格的bind/call/apply检查 */
+    "strictPropertyInitialization": false,       /* 严格的属性初始化检查 */
+    "noImplicitThis": false,                     /* 不允许隐式this */
+    "alwaysStrict": true,                        /* 以严格模式解析并为每个源文件生成"use strict" */
+    
+    /* 额外检查 */
+    "noUnusedLocals": false,                     /* 报告未使用的局部变量 */
+    "noUnusedParameters": false,                 /* 报告未使用的参数 */
+    "noImplicitReturns": false,                  /* 报告函数的某些代码路径没有返回值 */
+    "noFallthroughCasesInSwitch": true,          /* 报告switch语句的fallthrough错误 */
+    
+    /* 模块解析 */
+    "resolveJsonModule": true,                   /* 允许导入JSON文件 */
+    "allowJs": true,                             /* 允许编译JavaScript文件 */
+    "checkJs": false,                            /* 报告JavaScript文件中的错误 */
+    
+    /* 其他 */
+    "skipLibCheck": true,                        /* 跳过声明文件的类型检查 */
+    "declaration": true,                         /* 生成.d.ts文件 */
+    "declarationMap": true,                      /* 生成.d.ts.map文件 */
+    
+    /* 路径映射 */
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"],
+      "@server/*": ["./server/*"],
+      "@client/*": ["./client/*"]
+    }
+  },
+  
+  /* 包含和排除 */
+  "include": [
+    "server/**/*",
+    "*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "client",
+    "**/*.spec.ts",
+    "**/*.test.ts"
+  ],
+  
+  /* TypeScript编译器选项说明 */
+  "ts-node": {
+    "compilerOptions": {
+      "module": "commonjs"
+    }
+  }
+}
+
